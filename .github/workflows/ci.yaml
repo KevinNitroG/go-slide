@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Install Playwright-chromium
-        run: pnpm add -D playwright-chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Build site
         run: nr build --base /${{ github.event.repository.name }}/
       - name: Export PDF
