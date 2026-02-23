@@ -1,6 +1,8 @@
 Create a plan for quick, simple go language introduction, maybe skipping the beginner stuff, just kinda best practices
 Here is raw plan in Vietnamese, but you have to write in English:
 
+---
+
 1. Intro
 
 - Go struct, thay vì class
@@ -48,7 +50,7 @@ Here is raw plan in Vietnamese, but you have to write in English:
   > https://google.github.io/styleguide/go/best-practices.html
 - shorten variable cho struct in, param hạn chế, có những từ viết tắt dc theo tiêu chuẩn
 - Monorepo với go work nhưng nếu không quá to thì nên 1 go mod
-- Flow kube gộp tại monorepo và dùng bot sync ra single repo để release (version chung hay riêng thì không biết)
+- Flow kubernetes gộp tại monorepo và dùng bot sync ra single repo để release (version chung hay riêng thì không biết)
 - Folder structure đơn giản, nhiều repo để phẳng ra repo (swag, …?), không thì có go standard structure layout. Thiết kế package dựa trên cách dùng, cách package được import. Khó nói. Hạn chế đặt trùng các package có tên chung như http, database, sql, json
 - Logrus, uberzap nhanh, nhưng có thể dùng builtin slog vì nó đã là standard
 - pkg/errors, uber-go/multierr, hashicorp/go-multierror không nên xem nữa, hãy dùng builtin error with %w %v
@@ -57,6 +59,7 @@ Here is raw plan in Vietnamese, but you have to write in English:
 4. Writing library, releasing...
 
 - https://go.dev/doc/effective_go
+  > List a few
 - Go docs reference bằng comment trong go và release nó sẽ tự tạo docs
 - Release bằng cách git tag, người khác down về như ngôn ngữ interprete src code bình thường. Còn không release bin
 - Nhúng giá trị vào variable như version, build tag tự nó infer từ vcs được.
@@ -68,3 +71,7 @@ Here is raw plan in Vietnamese, but you have to write in English:
 - Ngôn ngữ syntax đơn giản, mới học sẽ không thấy giống ngôn ngữ nào cả. Nhưng syntax đơn giản không magic, không decorator vào class hay function như các ngôn ngữ khác, nên viết code rất tường minh, nhưng dài
 - the primegean nói go nằm giữa python, node, go, rust/zig
 - Lấy benchmark so nodejs với python, rust về mem + khả năng io, cpu bound
+
+---
+
+You need to rewrite the plan in detail to make slidev slide. Use your tools to browse those website links.
