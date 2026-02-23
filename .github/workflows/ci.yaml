@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - slides.md
+      - pages/**
+      - components/**
+      - snippets/**
+      - setup/**
+      - package.json
+    tags:
+      - "v*.*.*"
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .tool-versions
+      - name: Setup @antfu/ni
+        run: pnpm i -g @antfu/ni
+      - name: Install dependencies
+        run: pnpm i
+      - name: Install Playwright-chromium
+        run: pnpm add -D playwright-chromium
+      - name: Build site
+        run: nr build --base /${{ github.event.repository.name }}/
+      - name: Export PDF
+        run: nr export
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: slides-export.pdf
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+      - name: Upload PDF to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          files: slides-export.pdf
+          fail_on_unmatched_files: true
