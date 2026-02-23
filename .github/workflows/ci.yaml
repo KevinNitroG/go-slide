@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
       - name: Build site
-        run: pnpm build
+        run: pnpm build --base go-slide
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
