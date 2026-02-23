@@ -18,6 +18,7 @@ themeConfig:
   paginationX: r
   paginationY: t
   paginationPagesDisabled: [1]
+download: true
 ---
 
 # Go

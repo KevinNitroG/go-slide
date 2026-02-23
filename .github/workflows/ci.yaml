@@ -29,16 +29,10 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .tool-versions
-      - name: Setup @antfu/ni
-        run: pnpm i -g @antfu/ni
       - name: Install dependencies
         run: pnpm i
-      - name: Install Playwright-chromium
-        run: pnpm exec playwright install --with-deps chromium
       - name: Build site
-        run: nr build --base /${{ github.event.repository.name }}/
-      - name: Export PDF
-        run: nr export
+        run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
@@ -47,7 +41,7 @@ jobs:
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          path: slides-export.pdf
+          path: dist/slidev-exported.pdf
 
   deploy:
     environment:
@@ -79,5 +73,5 @@ jobs:
           name: "${{ github.ref_name }}"
           draft: false
           prerelease: false
-          files: slides-export.pdf
+          files: dist/slidev-exported.pdf
           fail_on_unmatched_files: true
