@@ -107,6 +107,8 @@ type User struct {
 
 ---
 hideInToc: true
+layout: two-cols
+layoutClass: gap-8
 ---
 
 ## Formatting & Interface Composition
@@ -114,6 +116,8 @@ hideInToc: true
 **`gofmt`** — enforces 8-space tabs and canonical formatting. No debates, no configuration.
 
 **Multiple Interface Embedding** — polymorphism via composing small, granular interfaces:
+
+::left::
 
 ```go
 // io package
@@ -128,5 +132,28 @@ type Writer interface {
 type ReadWriter interface {
     Reader
     Writer
+}
+```
+
+::right::
+
+Example satisfies above interfaces:
+
+```go
+type File struct {
+    // ...
+}
+
+var _ io.Reader = (*File)(nil) // compile-time check
+var _ io.Writer = (*File)(nil)
+// or
+var _ io.ReadWriter = (*File)(nil)
+
+func (f *File) Read(p []byte) (n int, err error) {
+    // ...
+}
+
+func (f *File) Write(p []byte) (n int, err error) {
+    // ...
 }
 ```

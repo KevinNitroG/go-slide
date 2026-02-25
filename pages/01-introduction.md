@@ -100,11 +100,9 @@ layout: two-cols
 layoutClass: gap-8
 ---
 
-## Formatting Verbs & Zero Values
+## Formatting Verbs
 
 ::left::
-
-**Common formatting verbs:**
 
 | Verb | Meaning        | Example                      |
 | ---- | -------------- | ---------------------------- |
@@ -113,16 +111,33 @@ layoutClass: gap-8
 | `%t` | boolean        | `true`                       |
 | `%q` | quoted string  | `"quoted"`                   |
 | `%w` | error wrapping | `fmt.Errorf("msg: %w", err)` |
+| `%T` | type           | `int`, `string`, etc.        |
 
 ::right::
+
+| Verb | Meaning       | Example        |
+| ---- | ------------- | -------------- |
+| `%s` | string        | `"hello"`      |
+| `%q` | quoted string | `"hello"`      |
+| `%p` | pointer       | `0xc000010230` |
+
+> More: [fmt package documentation](https://golang.org/pkg/fmt/#hdr-Printing)
+
+---
+hideInToc: true
+---
+
+## Zero Values
 
 **Zero values** — every type has a meaningful default, heavily relied upon in Go:
 
 ```go
-var i int     // 0
-var s string  // ""
-var b bool    // false
-var p *int    // nil
+var i int             // 0
+var s string          // ""
+var b bool            // false
+var p *int            // nil
+var m map[string]int  // nil
+var f func()   // nil
 
 type Config struct {
     Port    int    // 0
@@ -131,4 +146,32 @@ type Config struct {
 }
 // All fields usable without explicit initialisation
 cfg := Config{}
+```
+
+---
+hideInToc: true
+layout: two-cols
+layoutClass: gap-8
+---
+
+## New vs Make
+
+::left::
+
+**`new`** allocates memory and returns a pointer to the zero value of the type:
+
+```go
+p := new(int)     // *int, points to 0
+s1 := new(Person) // *Person, fields zero-valued
+s2 := &Person{}   // *Person, same as new(Person)
+```
+
+::right::
+
+**`make`** is used for slices, maps, and channels — it initialises the internal data structure:
+
+```go
+s := make([]int, 0)       // []int, empty slice
+m := make(map[string]int) // map[string]int, empty map
+ch := make(chan int)      // chan int, unbuffered channel
 ```
